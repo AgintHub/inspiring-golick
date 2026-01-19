@@ -1,86 +1,111 @@
 dag_type: plain_text
-description: Generates a detailed travel itinerary for Paris in April, including top
-  attractions and a curated selection of restaurants that offer great ambiance and
-  food at moderate prices.
-name: paris_april_itinerary_planner
+description: A workflow for writing a 5-chapter novel by concurrently developing the
+  story premise, characters, setting, and plot outline then writing each chapter based
+  on the outline.
+name: write_5_chapter_novel
 nodes:
-  compile_afternoon_activity_slots:
+  define_story_premise:
     agent: false
-    description: Assigns afternoon activities from the remaining attraction list.
-    name: compile_afternoon_activity_slots
-    nodes_depended_on:
-    - compile_morning_activity_slots
-    nodes_dependent_on: []
-    prompt: Assign the remaining attractions from the top 10 list to the afternoon
-      slots (1 PM - 5 PM) of the 3-day trip. Ensure flow with the morning activities.
-      List the Day, Time, and Activity Name.
-  compile_evening_dining_slots:
-    agent: false
-    description: Assigns dinner reservations from the curated restaurant lists.
-    name: compile_evening_dining_slots
-    nodes_depended_on:
-    - curate_bistrot_style_restaurants
-    - curate_trendy_neobistro_restaurants
-    - determine_trip_dates_context
-    nodes_dependent_on: []
-    prompt: Select 3 distinct restaurants from the provided bistro and neo-bistro
-      lists (one for each evening of the trip). Ensure variety in style. List the
-      Day, Time (e.g., 8:00 PM), Restaurant Name, Neighborhood, and the Decor description.
-  compile_morning_activity_slots:
-    agent: false
-    description: Assigns morning activities from the attraction list.
-    name: compile_morning_activity_slots
-    nodes_depended_on:
-    - identify_top_paris_attractions
-    - determine_trip_dates_context
-    nodes_dependent_on: []
-    prompt: Using the list of top 10 attractions, assign one attraction to each of
-      the 3 mornings (9 AM - 12 PM) of the trip. Group nearby attractions if possible.
-      List the Day, Time, and Activity Name.
-  curate_bistrot_style_restaurants:
-    agent: false
-    description: Finds bistros with good food, price, and decor.
-    name: curate_bistrot_style_restaurants
+    description: Create a concise story premise summarizing the core idea or theme
+      of the novel.
+    name: define_story_premise
     nodes_depended_on: []
-    nodes_dependent_on: []
-    prompt: Identify 5 authentic Parisian bistros known for good food, pricing in
-      the moderate range (€€), and charming or traditional decor. Provide the name,
-      neighborhood, and a 1-sentence description of the ambiance.
-  curate_trendy_neobistro_restaurants:
+    nodes_dependent_on:
+    - develop_character_list
+    - establish_setting
+    - outline_chapters
+    prompt: Write a concise paragraph describing the main premise or central theme
+      of a novel. Include the genre and the core idea or conflict around which the
+      story revolves.
+  develop_character_list:
     agent: false
-    description: Finds modern restaurants with stylish decor and good prices.
-    name: curate_trendy_neobistro_restaurants
-    nodes_depended_on: []
-    nodes_dependent_on: []
-    prompt: Identify 5 modern or 'neo-bistro' restaurants in Paris known for stylish
-      interiors, good food, and moderate pricing (€€). Provide the name, neighborhood,
-      and a 1-sentence description of the vibe.
-  determine_trip_dates_context:
-    agent: false
-    description: Establishes the specific dates in April to determine length of stay
-      for the itinerary.
-    name: determine_trip_dates_context
-    nodes_depended_on: []
-    nodes_dependent_on: []
-    prompt: Assume the trip is for 3 days in mid-April (e.g., April 15th to April
-      17th). Confirm these dates for the duration of the itinerary.
-  generate_final_itinerary_document:
-    agent: false
-    description: Combines all activities and dining into a cohesive travel plan.
-    name: generate_final_itinerary_document
+    description: Generate a list of main and supporting characters with brief descriptions
+      including their roles and traits.
+    name: develop_character_list
     nodes_depended_on:
-    - compile_morning_activity_slots
-    - compile_afternoon_activity_slots
-    - compile_evening_dining_slots
-    nodes_dependent_on: []
-    prompt: Combine the morning, afternoon, and evening slots into a cohesive 3-day
-      itinerary format. Format clearly by Day and Time blocks, including the restaurant
-      details.
-  identify_top_paris_attractions:
+    - define_story_premise
+    nodes_dependent_on:
+    - outline_chapters
+    prompt: Based on the story premise, list the main characters and key supporting
+      characters. For each, provide a one-sentence description covering role, personality
+      traits, and motivations.
+  establish_setting:
     agent: false
-    description: Lists must-see tourist spots and landmarks in Paris.
-    name: identify_top_paris_attractions
-    nodes_depended_on: []
+    description: Define the novel's setting including time, place, and atmosphere.
+    name: establish_setting
+    nodes_depended_on:
+    - define_story_premise
+    nodes_dependent_on:
+    - outline_chapters
+    prompt: Describe the setting for the novel, specifying the time period, key locations,
+      and overall atmosphere or mood. Keep it to a descriptive paragraph.
+  outline_chapters:
+    agent: false
+    description: Create a detailed outline for all 5 chapters incorporating premise,
+      characters, and setting.
+    name: outline_chapters
+    nodes_depended_on:
+    - define_story_premise
+    - develop_character_list
+    - establish_setting
+    nodes_dependent_on:
+    - write_chapter_1
+    - write_chapter_2
+    - write_chapter_3
+    - write_chapter_4
+    - write_chapter_5
+    prompt: Using the story premise, character descriptions, and setting, create a
+      detailed outline covering each of the 5 chapters. For each chapter, specify
+      the main events, character developments, and plot progression in 3-5 bullet
+      points.
+  write_chapter_1:
+    agent: false
+    description: Write the full text of chapter 1 based on the novel outline, introducing
+      characters and setting the initial conflict.
+    name: write_chapter_1
+    nodes_depended_on:
+    - outline_chapters
     nodes_dependent_on: []
-    prompt: List the top 10 tourist attractions in Paris suitable for a spring visit.
-      Provide only the names of the attractions.
+    prompt: Write chapter 1 of the novel following the provided outline. Introduce
+      main characters and setting, establish tone, and present the story's initial
+      conflict or hook.
+  write_chapter_2:
+    agent: false
+    description: Write the full text of chapter 2 continuing the story development
+      and deepening conflict based on the outline.
+    name: write_chapter_2
+    nodes_depended_on:
+    - outline_chapters
+    nodes_dependent_on: []
+    prompt: Write chapter 2 of the novel following the provided outline. Develop character
+      arcs and plot further, escalating the conflict introduced in chapter 1.
+  write_chapter_3:
+    agent: false
+    description: Write the full text of chapter 3 focusing on rising action and complicating
+      the narrative per the outline.
+    name: write_chapter_3
+    nodes_depended_on:
+    - outline_chapters
+    nodes_dependent_on: []
+    prompt: Write chapter 3 of the novel following the provided outline. Introduce
+      plot twists and increase tension among characters and events.
+  write_chapter_4:
+    agent: false
+    description: Write the full text of chapter 4 nearing climax and setting up resolution
+      according to the outline.
+    name: write_chapter_4
+    nodes_depended_on:
+    - outline_chapters
+    nodes_dependent_on: []
+    prompt: Write chapter 4 of the novel following the provided outline. Build toward
+      the climax by resolving some conflicts and heightening others.
+  write_chapter_5:
+    agent: false
+    description: Write the full text of chapter 5 delivering the climax and concluding
+      the story.
+    name: write_chapter_5
+    nodes_depended_on:
+    - outline_chapters
+    nodes_dependent_on: []
+    prompt: Write chapter 5 of the novel following the provided outline. Conclude
+      major plotlines and provide a satisfying ending to the story.
