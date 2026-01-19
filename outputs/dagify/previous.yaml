@@ -1,8 +1,7 @@
 dag_type: plain_text
-description: A workflow for writing a 5-chapter novel by concurrently developing the
-  story premise, characters, setting, and plot outline then writing each chapter based
-  on the outline.
-name: write_5_chapter_novel
+description: Generated workflow to write a 5-chapter novel with an added epilogue
+  chapter
+name: write_5_chapter_novel_with_epilogue
 nodes:
   define_story_premise:
     agent: false
@@ -13,7 +12,6 @@ nodes:
     nodes_dependent_on:
     - develop_character_list
     - establish_setting
-    - outline_chapters
     prompt: Write a concise paragraph describing the main premise or central theme
       of a novel. Include the genre and the core idea or conflict around which the
       story revolves.
@@ -22,9 +20,9 @@ nodes:
     description: Generate a list of main and supporting characters with brief descriptions
       including their roles and traits.
     name: develop_character_list
-    nodes_depended_on:
-    - define_story_premise
+    nodes_depended_on: []
     nodes_dependent_on:
+    - establish_setting
     - outline_chapters
     prompt: Based on the story premise, list the main characters and key supporting
       characters. For each, provide a one-sentence description covering role, personality
@@ -33,19 +31,17 @@ nodes:
     agent: false
     description: Define the novel's setting including time, place, and atmosphere.
     name: establish_setting
-    nodes_depended_on:
-    - define_story_premise
+    nodes_depended_on: []
     nodes_dependent_on:
     - outline_chapters
     prompt: Describe the setting for the novel, specifying the time period, key locations,
       and overall atmosphere or mood. Keep it to a descriptive paragraph.
   outline_chapters:
     agent: false
-    description: Create a detailed outline for all 5 chapters incorporating premise,
-      characters, and setting.
+    description: Create a detailed outline for all 5 chapters and epilogue incorporating
+      premise, characters, and setting.
     name: outline_chapters
     nodes_depended_on:
-    - define_story_premise
     - develop_character_list
     - establish_setting
     nodes_dependent_on:
@@ -54,10 +50,11 @@ nodes:
     - write_chapter_3
     - write_chapter_4
     - write_chapter_5
+    - write_epilogue
     prompt: Using the story premise, character descriptions, and setting, create a
-      detailed outline covering each of the 5 chapters. For each chapter, specify
-      the main events, character developments, and plot progression in 3-5 bullet
-      points.
+      detailed outline covering each of the 5 chapters and epilogue. For each chapter,
+      specify the main events, character developments, and plot progression in 3-5
+      bullet points.
   write_chapter_1:
     agent: false
     description: Write the full text of chapter 1 based on the novel outline, introducing
@@ -65,7 +62,8 @@ nodes:
     name: write_chapter_1
     nodes_depended_on:
     - outline_chapters
-    nodes_dependent_on: []
+    nodes_dependent_on:
+    - write_chapter_2
     prompt: Write chapter 1 of the novel following the provided outline. Introduce
       main characters and setting, establish tone, and present the story's initial
       conflict or hook.
@@ -76,7 +74,8 @@ nodes:
     name: write_chapter_2
     nodes_depended_on:
     - outline_chapters
-    nodes_dependent_on: []
+    nodes_dependent_on:
+    - write_chapter_3
     prompt: Write chapter 2 of the novel following the provided outline. Develop character
       arcs and plot further, escalating the conflict introduced in chapter 1.
   write_chapter_3:
@@ -86,7 +85,8 @@ nodes:
     name: write_chapter_3
     nodes_depended_on:
     - outline_chapters
-    nodes_dependent_on: []
+    nodes_dependent_on:
+    - write_chapter_4
     prompt: Write chapter 3 of the novel following the provided outline. Introduce
       plot twists and increase tension among characters and events.
   write_chapter_4:
@@ -96,7 +96,8 @@ nodes:
     name: write_chapter_4
     nodes_depended_on:
     - outline_chapters
-    nodes_dependent_on: []
+    nodes_dependent_on:
+    - write_chapter_5
     prompt: Write chapter 4 of the novel following the provided outline. Build toward
       the climax by resolving some conflicts and heightening others.
   write_chapter_5:
@@ -106,6 +107,18 @@ nodes:
     name: write_chapter_5
     nodes_depended_on:
     - outline_chapters
-    nodes_dependent_on: []
+    nodes_dependent_on:
+    - write_epilogue
     prompt: Write chapter 5 of the novel following the provided outline. Conclude
       major plotlines and provide a satisfying ending to the story.
+  write_epilogue:
+    agent: false
+    description: Write the epilogue chapter providing a final resolution or thematic
+      culmination after the main story concludes.
+    name: write_epilogue
+    nodes_depended_on:
+    - outline_chapters
+    - write_chapter_5
+    nodes_dependent_on: []
+    prompt: Write the epilogue chapter following the provided outline. Show the aftermath
+      of events, resolve minor plot threads, or provide a final thematic statement.
