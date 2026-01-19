@@ -1,7 +1,7 @@
 dag_type: plain_text
-description: Generated workflow to write a 5-chapter novel with an added epilogue
-  chapter
-name: write_5_chapter_novel_with_epilogue
+description: Workflow for writing a 5-chapter novel with a fully integrated epilogue
+  that aggregates all chapter outputs
+name: write_5_chapter_novel_with_epilogue_full_dependencies
 nodes:
   define_story_premise:
     agent: false
@@ -10,8 +10,7 @@ nodes:
     name: define_story_premise
     nodes_depended_on: []
     nodes_dependent_on:
-    - develop_character_list
-    - establish_setting
+    - outline_chapters
     prompt: Write a concise paragraph describing the main premise or central theme
       of a novel. Include the genre and the core idea or conflict around which the
       story revolves.
@@ -22,7 +21,6 @@ nodes:
     name: develop_character_list
     nodes_depended_on: []
     nodes_dependent_on:
-    - establish_setting
     - outline_chapters
     prompt: Based on the story premise, list the main characters and key supporting
       characters. For each, provide a one-sentence description covering role, personality
@@ -47,7 +45,7 @@ nodes:
     nodes_dependent_on:
     - write_chapter_1
     - write_chapter_2
-    - write_chapter_3
+    - write_chapter_3a
     - write_chapter_4
     - write_chapter_5
     - write_epilogue
@@ -64,6 +62,8 @@ nodes:
     - outline_chapters
     nodes_dependent_on:
     - write_chapter_2
+    - write_chapter_3a
+    - write_epilogue
     prompt: Write chapter 1 of the novel following the provided outline. Introduce
       main characters and setting, establish tone, and present the story's initial
       conflict or hook.
@@ -75,19 +75,37 @@ nodes:
     nodes_depended_on:
     - outline_chapters
     nodes_dependent_on:
-    - write_chapter_3
+    - write_chapter_3a
+    - write_chapter_4
+    - write_epilogue
     prompt: Write chapter 2 of the novel following the provided outline. Develop character
       arcs and plot further, escalating the conflict introduced in chapter 1.
-  write_chapter_3:
+  write_chapter_3a:
     agent: false
-    description: Write the full text of chapter 3 focusing on rising action and complicating
-      the narrative per the outline.
-    name: write_chapter_3
+    description: Write part A of chapter 3 focusing on rising action and narrative
+      setup as outlined.
+    name: write_chapter_3a
     nodes_depended_on:
     - outline_chapters
     nodes_dependent_on:
+    - write_chapter_3b
     - write_chapter_4
-    prompt: Write chapter 3 of the novel following the provided outline. Introduce
+    - write_epilogue
+    prompt: Write chapter 3A of the novel following the provided outline. Focus on
+      developing the initial rising action and setting up key plot elements for the
+      chapter.
+  write_chapter_3b:
+    agent: false
+    description: Write part B of chapter 3 continuing rising action and introducing
+      complications as outlined.
+    name: write_chapter_3b
+    nodes_depended_on:
+    - write_chapter_3a
+    nodes_dependent_on:
+    - write_chapter_4
+    - write_chapter_5
+    - write_epilogue
+    prompt: Write chapter 3B of the novel following the provided outline. Introduce
       plot twists and increase tension among characters and events.
   write_chapter_4:
     agent: false
@@ -96,8 +114,10 @@ nodes:
     name: write_chapter_4
     nodes_depended_on:
     - outline_chapters
+    - write_chapter_3b
     nodes_dependent_on:
     - write_chapter_5
+    - write_epilogue
     prompt: Write chapter 4 of the novel following the provided outline. Build toward
       the climax by resolving some conflicts and heightening others.
   write_chapter_5:
@@ -113,12 +133,17 @@ nodes:
       major plotlines and provide a satisfying ending to the story.
   write_epilogue:
     agent: false
-    description: Write the epilogue chapter providing a final resolution or thematic
-      culmination after the main story concludes.
+    description: Write the epilogue chapter synthesizing all chapter content and providing
+      final resolution
     name: write_epilogue
     nodes_depended_on:
     - outline_chapters
+    - write_chapter_1
+    - write_chapter_2
+    - write_chapter_3b
+    - write_chapter_4
     - write_chapter_5
     nodes_dependent_on: []
-    prompt: Write the epilogue chapter following the provided outline. Show the aftermath
-      of events, resolve minor plot threads, or provide a final thematic statement.
+    prompt: Write the epilogue chapter using the completed chapters and outline. Synthesize
+      key narrative elements, show character aftermaths, resolve lingering threads,
+      and provide thematic closure using direct references to previous chapter content.

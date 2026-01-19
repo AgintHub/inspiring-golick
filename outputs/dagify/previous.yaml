@@ -1,7 +1,7 @@
 dag_type: plain_text
-description: Generated workflow to write a 5-chapter novel with an added epilogue
-  chapter
-name: write_5_chapter_novel_with_epilogue
+description: 'Generated workflow from UI with chapter 3 split into two parts: 3a and
+  3b.'
+name: write_5_chapter_novel_with_epilogue_split_chapter3
 nodes:
   define_story_premise:
     agent: false
@@ -12,6 +12,7 @@ nodes:
     nodes_dependent_on:
     - develop_character_list
     - establish_setting
+    - outline_chapters
     prompt: Write a concise paragraph describing the main premise or central theme
       of a novel. Include the genre and the core idea or conflict around which the
       story revolves.
@@ -22,6 +23,7 @@ nodes:
     name: develop_character_list
     nodes_depended_on: []
     nodes_dependent_on:
+    - develop_character_list
     - establish_setting
     - outline_chapters
     prompt: Based on the story premise, list the main characters and key supporting
@@ -33,6 +35,8 @@ nodes:
     name: establish_setting
     nodes_depended_on: []
     nodes_dependent_on:
+    - develop_character_list
+    - establish_setting
     - outline_chapters
     prompt: Describe the setting for the novel, specifying the time period, key locations,
       and overall atmosphere or mood. Keep it to a descriptive paragraph.
@@ -47,10 +51,10 @@ nodes:
     nodes_dependent_on:
     - write_chapter_1
     - write_chapter_2
-    - write_chapter_3
+    - write_chapter_3a
+    - write_chapter_3b
     - write_chapter_4
     - write_chapter_5
-    - write_epilogue
     prompt: Using the story premise, character descriptions, and setting, create a
       detailed outline covering each of the 5 chapters and epilogue. For each chapter,
       specify the main events, character developments, and plot progression in 3-5
@@ -75,19 +79,31 @@ nodes:
     nodes_depended_on:
     - outline_chapters
     nodes_dependent_on:
-    - write_chapter_3
+    - write_chapter_3a
     prompt: Write chapter 2 of the novel following the provided outline. Develop character
       arcs and plot further, escalating the conflict introduced in chapter 1.
-  write_chapter_3:
+  write_chapter_3a:
     agent: false
-    description: Write the full text of chapter 3 focusing on rising action and complicating
-      the narrative per the outline.
-    name: write_chapter_3
+    description: Write part A of chapter 3 focusing on rising action and narrative
+      setup as outlined.
+    name: write_chapter_3a
     nodes_depended_on:
     - outline_chapters
     nodes_dependent_on:
+    - write_chapter_3b
+    prompt: Write chapter 3A of the novel following the provided outline. Focus on
+      developing the initial rising action and setting up key plot elements for the
+      chapter.
+  write_chapter_3b:
+    agent: false
+    description: Write part B of chapter 3 continuing rising action and introducing
+      complications as outlined.
+    name: write_chapter_3b
+    nodes_depended_on:
+    - write_chapter_3a
+    nodes_dependent_on:
     - write_chapter_4
-    prompt: Write chapter 3 of the novel following the provided outline. Introduce
+    prompt: Write chapter 3B of the novel following the provided outline. Introduce
       plot twists and increase tension among characters and events.
   write_chapter_4:
     agent: false
@@ -96,6 +112,7 @@ nodes:
     name: write_chapter_4
     nodes_depended_on:
     - outline_chapters
+    - write_chapter_3b
     nodes_dependent_on:
     - write_chapter_5
     prompt: Write chapter 4 of the novel following the provided outline. Build toward
