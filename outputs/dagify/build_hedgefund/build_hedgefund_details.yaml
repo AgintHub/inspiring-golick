@@ -1,0 +1,269 @@
+dag_type: plain_text
+description: Create a comprehensive plan for launching a hedge fund
+name: build_hedgefund
+nodes:
+  choose_investment_strategy:
+    agent: false
+    description: Select a high-level investment strategy category
+    name: choose_investment_strategy
+    nodes_depended_on:
+    - clarify_fund_objectives
+    nodes_dependent_on:
+    - select_jurisdiction
+    - set_performance_and_risk_targets
+    - design_risk_management_framework
+    prompt: Choose a hedge fund strategy category (e.g., long/short equity, global
+      macro) and provide a one-sentence rationale.
+  choose_legal_entity_type:
+    agent: false
+    description: Identify the legal entity structure for the fund vehicle
+    name: choose_legal_entity_type
+    nodes_depended_on:
+    - select_jurisdiction
+    nodes_dependent_on:
+    - select_investment_manager
+    - list_service_providers
+    - design_risk_management_framework
+    prompt: Choose the entity structure (e.g., LP, LLC, SICAV) and provide a one-sentence
+      explanation.
+  clarify_fund_objectives:
+    agent: false
+    description: State the primary business objectives for the hedge fund
+    name: clarify_fund_objectives
+    nodes_depended_on: []
+    nodes_dependent_on:
+    - identify_regulatory_requirements
+    - define_investor_profile
+    - choose_investment_strategy
+    prompt: List the core objectives for launching the hedge fund in 8 bullet points,
+      covering investment purpose, competitive edge, and long-term vision.
+  compile_pitch_deck_outline:
+    agent: false
+    description: Framework for fundraising presentation
+    name: compile_pitch_deck_outline
+    nodes_depended_on:
+    - clarify_fund_objectives
+    - define_investor_profile
+    - choose_investment_strategy
+    - set_performance_and_risk_targets
+    - draft_fee_structure
+    - design_risk_management_framework
+    nodes_dependent_on:
+    - create_hiring_plan
+    - define_technology_stack
+    - develop_timeline_and_milestones
+    prompt: Create a 10-slide outline (slide titles only) for an investor pitch deck
+      incorporating objectives, strategy, team, edge, risk controls, fees, and expected
+      returns.
+  create_hiring_plan:
+    agent: false
+    description: Determine initial staffing requirements
+    name: create_hiring_plan
+    nodes_depended_on:
+    - draft_operations_workflow
+    nodes_dependent_on:
+    - compile_pitch_deck_outline
+    - define_technology_stack
+    - develop_timeline_and_milestones
+    prompt: List essential full-time positions for launch (max 8), with one-line responsibility
+      each. Align roles with operations workflow gaps.
+  define_asset_universe:
+    agent: false
+    description: Enumerate tradable assets and instruments
+    name: define_asset_universe
+    nodes_depended_on:
+    - choose_investment_strategy
+    nodes_dependent_on:
+    - select_investment_manager
+    - list_service_providers
+    - design_risk_management_framework
+    prompt: List the specific asset classes and instruments the chosen strategy will
+      trade (e.g., US large-cap equities, S&P futures).
+  define_investor_profile:
+    agent: false
+    description: Describe the target investor segment for the fund
+    name: define_investor_profile
+    nodes_depended_on:
+    - clarify_fund_objectives
+    nodes_dependent_on:
+    - choose_investment_strategy
+    - set_performance_and_risk_targets
+    - estimate_setup_and_operating_costs
+    prompt: Specify the ideal target investor profile (e.g., family offices, pensions)
+      based on the stated fund objectives.
+  define_technology_stack:
+    agent: false
+    description: Specify technology tools supporting operations
+    name: define_technology_stack
+    nodes_depended_on:
+    - draft_operations_workflow
+    nodes_dependent_on:
+    - create_hiring_plan
+    - compile_pitch_deck_outline
+    - develop_timeline_and_milestones
+    prompt: Identify required software and infrastructure components for each operations
+      step (e.g., OMS, EMS, risk system). Present as a 2-column table.
+  design_compliance_program:
+    agent: false
+    description: Create compliance policies aligned with regulations and risk
+    name: design_compliance_program
+    nodes_depended_on:
+    - identify_regulatory_requirements
+    - design_risk_management_framework
+    nodes_dependent_on:
+    - produce_final_fund_plan_summary
+    - compile_pitch_deck_outline
+    - develop_timeline_and_milestones
+    prompt: Generate a compliance checklist mapping each regulatory requirement to
+      a specific internal policy or procedure.
+  design_risk_management_framework:
+    agent: false
+    description: Outline quantitative and qualitative risk controls
+    name: design_risk_management_framework
+    nodes_depended_on:
+    - set_performance_and_risk_targets
+    nodes_dependent_on:
+    - choose_investment_strategy
+    - select_legal_entity_type
+    - list_service_providers
+    prompt: List core risk controls aligned with the target metrics, including position
+      limits, VaR limits, stop-loss rules, and liquidity thresholds.
+  develop_timeline_and_milestones:
+    agent: false
+    description: Create phased schedule leading to fund launch
+    name: develop_timeline_and_milestones
+    nodes_depended_on:
+    - draft_operations_workflow
+    - define_technology_stack
+    - create_hiring_plan
+    nodes_dependent_on:
+    - produce_final_fund_plan_summary
+    - compile_pitch_deck_outline
+    - create_hiring_plan
+    prompt: Prepare a launch timeline with monthly milestones over the next 12 months.
+  draft_fee_structure:
+    agent: false
+    description: Set management and performance fee levels
+    name: draft_fee_structure
+    nodes_depended_on:
+    - set_performance_and_risk_targets
+    - estimate_setup_and_operating_costs
+    nodes_dependent_on:
+    - compile_pitch_deck_outline
+    - create_hiring_plan
+    - define_technology_stack
+    prompt: Propose management and performance fee percentages that balance cost recovery
+      and competitiveness. Include incentive hurdle if relevant.
+  draft_operations_workflow:
+    agent: false
+    description: Map core trade and post-trade operational steps
+    name: draft_operations_workflow
+    nodes_depended_on:
+    - define_asset_universe
+    - list_service_providers
+    - design_risk_management_framework
+    nodes_dependent_on:
+    - create_hiring_plan
+    - define_technology_stack
+    - develop_timeline_and_milestones
+    prompt: 'Sketch the daily trade lifecycle: idea generation → order entry → execution
+      → confirmation → settlement → reconciliation. List each step with primary responsible
+      party.'
+  estimate_setup_and_operating_costs:
+    agent: false
+    description: Rough cost model for fund setup and operations
+    name: estimate_setup_and_operating_costs
+    nodes_depended_on:
+    - list_service_providers
+    nodes_dependent_on:
+    - define_investor_profile
+    - select_investment_manager
+    - design_risk_management_framework
+    prompt: Provide a simple annual cost estimate (in USD) for each listed service
+      provider, considering overhead (office, tech).
+  identify_regulatory_requirements:
+    agent: false
+    description: Outline key regulatory filings and registrations
+    name: identify_regulatory_requirements
+    nodes_depended_on:
+    - select_jurisdiction
+    nodes_dependent_on:
+    - choose_investment_strategy
+    - select_legal_entity_type
+    - outline_governance_structure
+    prompt: List the primary registrations or filings required for the selected entity
+      and jurisdiction (e.g., SEC Form ADV). Provide citation to governing body names
+      only.
+  list_service_providers:
+    agent: false
+    description: Enumerate required third-party service providers
+    name: list_service_providers
+    nodes_depended_on: []
+    nodes_dependent_on:
+    - choose_investment_strategy
+    - estimate_setup_and_operating_costs
+    - design_risk_management_framework
+    prompt: Generate a checklist of mandatory external service providers (e.g., prime
+      broker, fund administrator, auditor).
+  outline_governance_structure:
+    agent: false
+    description: Define internal governance roles and duties
+    name: outline_governance_structure
+    nodes_depended_on:
+    - choose_legal_entity_type
+    nodes_dependent_on:
+    - select_investment_manager
+    - list_service_providers
+    - design_risk_management_framework
+    prompt: 'Draft a simple governance chart: roles of GP, investment manager, board
+      (if any). Limit to 5 roles with one-line duties each.'
+  produce_final_fund_plan_summary:
+    agent: false
+    description: Generate an all-in summary of the hedge fund plan
+    name: produce_final_fund_plan_summary
+    nodes_depended_on:
+    - design_compliance_program
+    - compile_pitch_deck_outline
+    - develop_timeline_and_milestones
+    nodes_dependent_on:
+    - create_hiring_plan
+    - define_technology_stack
+    - develop_timeline_and_milestones
+    prompt: Synthesize prior outputs into a concise executive summary (≤400 words)
+      covering strategy, structure, risk, ops, fees, timeline.
+  select_investment_manager:
+    agent: false
+    description: Identify the investment manager or team
+    name: select_investment_manager
+    nodes_depended_on:
+    - choose_investment_strategy
+    nodes_dependent_on:
+    - select_legal_entity_type
+    - define_investor_profile
+    - set_performance_and_risk_targets
+    prompt: Name the investment manager or team responsible for the strategy and provide
+      a brief description.
+  select_jurisdiction:
+    agent: false
+    description: Pick the fund domicile and note rationale
+    name: select_jurisdiction
+    nodes_depended_on:
+    - clarify_fund_objectives
+    nodes_dependent_on:
+    - choose_investment_strategy
+    - select_legal_entity_type
+    - outline_governance_structure
+    prompt: Select the optimal fund domicile (e.g., Cayman, Delaware, Luxembourg)
+      and provide 2 pros and 2 cons for the selected jurisdiction.
+  set_performance_and_risk_targets:
+    agent: false
+    description: Quantify return and risk goals
+    name: set_performance_and_risk_targets
+    nodes_depended_on:
+    - choose_investment_strategy
+    nodes_dependent_on:
+    - select_jurisdiction
+    - clarify_fund_objectives
+    - design_risk_management_framework
+    prompt: Define numerical annual targets for gross return, volatility, Sharpe ratio,
+      and maximum drawdown consistent with the chosen strategy.
